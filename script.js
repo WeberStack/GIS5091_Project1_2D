@@ -1,8 +1,4 @@
 require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer"], (Map, MapView, FeatureLayer) => {
-//        var map = new Map({
-//          basemap: "hybrid"
-//        });
-
       var map = new Map({
        basemap: "streets-night-vector",
        //layers: [featureLayer_1]
