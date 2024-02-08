@@ -1,52 +1,62 @@
 require([
       "esri/Map",
+      "esri/layers/CSVLayer",
       "esri/views/MapView",
-      "esri/layers/FeatureLayer"],
-, function(
+      "esri/config",
+      "esri/core/urlUtils",
+      "dojo/domReady!"
+    ], function(
       Map,
+      CSVLayer,
       MapView,
-      FeatureLayer
+      esriConfig,
+      urlUtils
     ) {
+
+      // If CSV files are not on the same domain as your website, a CORS enabled server
+      // or a proxy is required.
+     var url = "https://raw.githubusercontent.com/orhuna/WebGIS_SLU_M1/main/Module%202/stl_crime_wgs_84.csv";
+     esriConfig.request.corsEnabledServers.push('https://rawgit.com');
+
+      // Paste the url into a browser's address bar to download and view the attributes
+      // in the CSV file. These attributes include:
+      // * mag - magnitude
+      // * type - earthquake or other event such as nuclear test
+      // * place - location of the event
+      // * time - the time of the event
+
+        const template = {
+          title: "Earthquake Info",
+          content: "Magnitude {mag} {type} hit {place} on {time}."
+        };
+
+        const csvLayer = new CSVLayer({
+          url: url,
+          copyright: "USGS Earthquakes",
+          popupTemplate: template
+        });
+
+        var symbol = {
+          type: "simple-marker", 
+          color: "red"
+        };
+
+      csvLayer.renderer = {
+        type: "simple", // autocasts as new SimpleRenderer()
+        symbol: symbol
+      };
+
       var map = new Map({
-       basemap: "streets-night-vector",
-       //layers: [featureLayer_1]
+        basemap: "gray",
+        layers: [csvLayer]
       });
-     
-     var view = new MapView({
-       container:  "viewDiv",
-       map: map,
-       center: [ -90.1994, 38.6270 ],
-       zoom: 10,
-          popup: {
-            actions: []
-          }
+
+      var view = new MapView({
+        container: "viewDiv",
+         map: map,
+          center: [-90.199402, 38.627003],
+          zoom: 14,
+        map: map
       });
-      
 
-var featureLayer_1 = new FeatureLayer({ url: "https://services2.arcgis.com/ZV8Mb62EedSw2aTU/ArcGIS/rest/services/CurrentSystem_REGISTERED_1/FeatureServer/4"
-});
-  
-map.add(featureLayer_1);
-
-
-var featureLayer_2 = new FeatureLayer({
-  url: 
-"https://maps.stlouisco.com/arcgis/rest/services/OpenData/OpenData/FeatureServer/4"
-});
-map.add(featureLayer_2);
-
-  
-var featureLayer_3 = new FeatureLayer({
-  url: 
-"https://services2.arcgis.com/kNS2ppBA4rwAQQZy/ArcGIS/rest/services/MO_Public_Schools/FeatureServer/0"
-});
-map.add(featureLayer_3);
-
-
-var featureLayer_4 = new FeatureLayer({
-  url: 
-"https://maps.stlouisco.com/arcgis/rest/services/OpenData/OpenData/FeatureServer/15"
-});
-
-map.add(featureLayer_4);
-});  
+    });
