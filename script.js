@@ -1,9 +1,17 @@
-require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer"], (Map, MapView, FeatureLayer) => {
+require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer"],
+, function(
+      Map,
+      MapView,
+      FeatureLayer
+    ) {
       var map = new Map({
        basemap: "streets-night-vector",
        //layers: [featureLayer_1]
       });
-
+     
      var view = new MapView({
        container:  "viewDiv",
        map: map,
